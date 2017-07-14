@@ -6,7 +6,7 @@ size = 1;
 
 place = 'usa';
 
-var val = size + ' for ' + usa;
+var val = size + ' for ' + place;
 
 console.log(val);
 
