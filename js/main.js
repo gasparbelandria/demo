@@ -8,5 +8,5 @@ place = 'usa';
 
 var val = size + ' for ' + place;
 
-console.log(val);
+document.write(val);
 
