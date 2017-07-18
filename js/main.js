@@ -7,5 +7,3 @@ size = 1;
 place = 'usa';
 
 var val = size + ' for ' + place;
-
-error here
