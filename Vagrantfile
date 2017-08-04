@@ -63,7 +63,7 @@ Vagrant.configure(2) do |config|
             vb.cpus = 2
         end
 
-        node.vm.hostname = 'developer'
+        node.vm.hostname = 'localhost'
         node.vm.provision 'shell' do |s|
             s.path = './bootstrap.sh'
             s.privileged = false
@@ -84,4 +84,3 @@ Vagrant.configure(2) do |config|
     end
 
 end
-

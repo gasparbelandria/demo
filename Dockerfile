@@ -17,31 +17,45 @@ EXPOSE 80 443 3000 35729 8080
 ENV NODE_ENV development
 
 # Install Utilities
-RUN apt-get update -q  \
- && apt-get install -yqq \
- curl \
- git \
- ssh \
- gcc \
- make \
- build-essential \
- libkrb5-dev \
- sudo \
- apt-utils \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+##########
+# Centos #
+##########
+RUN yum check-update -q \
+ && yum install -yq \
+        git \
+        ntp \
+        epel-release \
+        nodejs \
+ && yum -y groupinstall 'Development Tools' \
+ && yum clean packages \
+ && rm -rf /tmp/* /var/tmp/*
 
+##########
+# Ubuntu #
+##########
+# RUN apt-get update -q  \
+#  && apt-get install -yqq \
+#  curl \
+#  git \
+#  ssh \
+#  gcc \
+#  make \
+#  build-essential \
+#  libkrb5-dev \
+#  sudo \
+#  apt-utils \
+#  && apt-get clean \
+#  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Ubuntu
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN sudo apt-get install -yq nodejs \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+# RUN sudo apt-get install -yq nodejs \
+#  && apt-get clean \
+#  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install MEAN.JS Prerequisites
 RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 && npm cache clean
 
-RUN mkdir -p /opt/mean.js
-RUN mkdir -p /opt/mean.js/public
 RUN mkdir -p /opt/mean.js/public/lib
 WORKDIR /opt/mean.js
 
@@ -52,7 +66,6 @@ WORKDIR /opt/mean.js
 # Install npm packages
 COPY package.json /opt/mean.js/package.json
 RUN npm install --quiet && npm cache clean
-RUN cat /opt/mean.js/package.json
 
 # Install bower packages
 COPY bower.json /opt/mean.js/bower.json
@@ -62,5 +75,4 @@ RUN bower install --quiet --allow-root --config.interactive=false
 COPY . /opt/mean.js
 
 # Run MEAN.JS server
-# CMD npm install && npm start
-# CMD ["npm", "install", ";", "npm","start"]
+CMD npm install && npm start
